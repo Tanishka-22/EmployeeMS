@@ -1,8 +1,8 @@
 import React from 'react';
-import { EmpSidebar } from './Employee/EmpSidebar';
-import { EmpNavbar } from './Employee/EmpNavbar';
-import { EmpSummary } from './Employee/EmpSummary';
-import { EmpTasks } from './Employee/EmpTasks';
+import { EmpSidebar } from './EmpSidebar';
+import { EmpNavbar } from './EmpNavbar';
+import { EmpSummary } from './EmpSummary';
+import { EmpTasks } from './EmpTasks';
 
 const EmployeeDashboard = () => {
     return (

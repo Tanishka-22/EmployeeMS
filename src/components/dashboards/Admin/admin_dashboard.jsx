@@ -1,7 +1,7 @@
 import React from 'react';
-import SideBar from './Admin/SideBar';
-import { NavBar } from './Admin/NavBar';
-import { AdminSummary } from './Admin/AdminSummary';
+import SideBar from './SideBar';
+import { NavBar } from './NavBar';
+import { AdminSummary } from './AdminSummary';
 
 
 const AdminDashboard = () => {
