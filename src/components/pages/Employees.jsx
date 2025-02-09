@@ -14,9 +14,9 @@ export const ManageEmployees = () => {
 
   return (
     <div className="flex h-screen">
-        <SideBar/>
+       
         <div className="main-content flex-1 p-2">
-            <NavBar/>
+            
             <h3 className='text-3xl'>Employees</h3>
             <div className='flex justify-between'>
             <input type='text' placeholder='Search Employees' className='border text-sm py-1 px-2 mx-5' />

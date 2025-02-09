@@ -13,9 +13,7 @@ export const EmpProfile = () => {
 
     return (
         <div className="admin-dashboard flex">
-            <EmpSidebar />
             <div className="main-content flex-1 p-2">
-                <EmpNavbar />
                 <EmpProfileBox employee={employee} />
             </div>
         </div>

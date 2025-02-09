@@ -25,7 +25,7 @@ const App = () => {
 
     return(
       <div>
-      {!user ? <Login handleLogin={handleLogin} /> : user === 'admin' ? <Admin /> : <Employee />}      
+      {!user ? (<Login handleLogin={handleLogin} />) : (user === 'admin' ? <Admin /> : <Employee />)}      
       </div>
     )
 }

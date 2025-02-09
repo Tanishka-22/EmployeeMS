@@ -3,6 +3,8 @@ import { EmpSidebar } from './EmpSidebar';
 import { EmpNavbar } from './EmpNavbar';
 import { EmpSummary } from './EmpSummary';
 import { EmpTasks } from './EmpTasks';
+import { Routes, Route } from 'react-router-dom';
+import { EmpProfile } from '../../pages/EmpProfile';
 
 const EmployeeDashboard = () => {
     return (
@@ -10,8 +12,12 @@ const EmployeeDashboard = () => {
                 <EmpSidebar/>
                 <div className="main-content flex-1 p-2">
                     <EmpNavbar/>
-                    <EmpSummary/>
-                    <EmpTasks/>
+                    <Routes>
+                        <Route path="/EmployeeDashboard" element={<EmpSummary/>}/>
+                        <Route path="/EmployeeDashboard" element={<EmpTasks/>}/>
+                        <Route path="/EmployeeDashboard/Profile" element={<EmpProfile/>}/>
+                        <Route path="/login" element={<Login/>}/>
+                    </Routes>
                 </div>
             </div>
     );

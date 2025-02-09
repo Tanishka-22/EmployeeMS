@@ -13,9 +13,9 @@ export const Tasks = () => {
 
   return (
     <div className="flex h-screen">
-            <SideBar/>
+          
             <div className="main-content flex-1 p-2">
-                <NavBar/>
+               
                 <h3 className='text-3xl'>Tasks</h3>
                 <div className='flex justify-between'>
                 <button onClick={toggleAddTask} className="bg-green-700 mt-2 ml-4 hover:bg-green-600 text-white font-bold py-2 px-4 border border-green-800 rounded">

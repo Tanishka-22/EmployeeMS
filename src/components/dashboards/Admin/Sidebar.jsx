@@ -10,11 +10,56 @@ const SideBar = () => {
       </div>
       <div className='mt-8 p-2'>
         <ul> 
-          <li className='navList items-center  py-3 rounded'>Dashboard</li>
-          <li className='navList items-center  py-3 rounded'>Tasks</li>
-          <li className='navList items-center  py-3 rounded'>Employees</li>
-          <li className='navList items-center  py-3 rounded'>Departments</li>
-          <li className='navList items-center  py-3 rounded'>Log Out</li>
+          <li className='navList items-center  py-3 rounded'>
+            <NavLink
+              to="/AdminDashboard"
+              className={({ isActive }) =>
+                isActive ? "font-bold" : "font-normal"
+              }
+            >
+            Dashboard
+            </NavLink>
+          </li>
+          <li className='navList items-center  py-3 rounded'>
+            <NavLink
+              to="/AdminDashboard/Tasks"
+              className={({ isActive }) =>
+                isActive ? "font-bold" : "font-normal"
+              }
+            >
+            Tasks
+            </NavLink>
+          </li>
+          <li className='navList items-center  py-3 rounded'>
+            <NavLink
+              to="/AdminDashboard/Employees"
+              className={({ isActive }) =>
+                isActive ? "font-bold" : "font-normal"
+              }
+            >
+              Employees
+            </NavLink>
+          </li>
+          <li className='navList items-center  py-3 rounded'>
+            <NavLink
+              to="/AdminDashboard/Departments"
+              className={({ isActive }) =>
+                isActive ? "font-bold" : "font-normal"
+              }
+            >
+              Departments
+            </NavLink>
+          </li>
+          <li className='navList items-center  py-3 rounded'>
+            <NavLink
+              to="/AdminDashboard"
+              className={({ isActive }) =>
+                isActive ? "font-bold" : "font-normal"
+              }
+            >
+              Log Out
+            </NavLink>
+          </li>
         </ul>
       </div>
     </nav>
