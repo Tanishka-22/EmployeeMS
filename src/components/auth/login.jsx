@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-const Login = () => {
+const Login = ({handleLogin}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("srvjg",{ email, password, rememberMe });
+        handleLogin(email, password);
 
         setEmail("");
         setPassword("");
@@ -21,7 +21,7 @@ const Login = () => {
                 <div className='loginHead'><h1 className=''>Login Page</h1></div>
                     <div className='flex flex-col p-2 loginLabels'>
                         <label className='' htmlFor="email">Email:</label>
-                        <input required className='rounded-2 p-1 mt-1'
+                        <input required className='rounded-2 p-1 mt-1 text-black'
                             type="email"
                             id="email"
                             value={email}
@@ -30,7 +30,7 @@ const Login = () => {
                     </div>
                     <div className='flex flex-col p-2 loginLabels'>
                         <label htmlFor="password">Password:</label>
-                        <input required className='rounded-0 p-1 mt-1'
+                        <input required className='rounded-0 p-1 mt-1 text-black'
                             type="password"
                             id="password"
                             value={password}
