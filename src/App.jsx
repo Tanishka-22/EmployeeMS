@@ -1,34 +1,35 @@
-import './App.css'
-import React, { useContext, useState } from 'react'
-import Login from './components/auth/login'
-
+import './App.css';
+import React from 'react';
+import Login from './components/auth/login';
 import { Admin } from './components/dashboards/Admin';
 import { Employee } from './components/dashboards/Employee';
+import { ToastContainer } from 'react-toastify';
+import { AuthProvider, useAuth } from './components/context/AuthProvider';
+import 'react-toastify/dist/ReactToastify.css';
 
-import { ToastContainer, toast } from 'react-toastify';
-import { AuthContext } from './components/context/AuthProvider';
+const AppContent = () => {
+    const { user, role, loading } = useAuth();
+
+    if (loading) return <h1>Loading...</h1>;
+
+    return (
+        <>
+            {!user ? (
+                <Login />
+            ) : (
+                role === 'admin' ? <Admin /> : <Employee />
+            )}
+        </>
+    );
+};
 
 const App = () => {
-    const [user, setUser] = useState(null);
-    const handleLogin = (email,password) => {
-      if (email === "admin@gmail.com" && password === "admin") {
-        setUser('admin');
-        console.log("Admin");
-      } else if(email === "user@gmail.com" && password === "user") {
-        setUser('employee');
-      } else {
-        toast.error("Invalid Credentials");
-      }
-    }
-    
-    const data = useContext(AuthContext);
-
-    return(
-      <div>
-      {!user ? (<Login handleLogin={handleLogin} />) : (user === 'admin' ? <Admin /> : <Employee />)}      
-      </div>
-    )
-}
+    return (
+        <AuthProvider>
+            <ToastContainer />
+            <AppContent />
+        </AuthProvider>
+    );
+};
 
 export default App;
-

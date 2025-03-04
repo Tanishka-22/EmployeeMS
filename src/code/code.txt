@@ -1,0 +1,208 @@
+auth providder:
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase';
+
+const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+    const [userLoggedIn, setUserLoggedIn] = useState(null);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setUserLoggedIn(user);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    return (
+        <AuthContext.Provider value={{ userLoggedIn }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => {
+    return useContext(AuthContext);
+};
+
+
+---------------------------------------------------------------
+
+login: 
+
+import React, { useState } from 'react';
+import { Navigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthProvider';
+
+const Login = ({ handleLogin }) => {
+    const { userLoggedIn } = useAuth();
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
+    const [isSignedIn, setIsSignedIn] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!isSignedIn) {
+            setIsSignedIn(true);
+            try {
+                await handleLogin(email, password);
+            } catch (error) {
+                console.error("Login failed", error);
+                setIsSignedIn(false); // Reset the state if login fails
+            }
+        }
+    };
+
+    if (userLoggedIn) {
+        return <Navigate to="/" />;
+    }
+
+    return (
+        <div className="loginPage h-screen v-screen flex justify-center items-center">
+            <div className="loginForm p-3 rounded w-25 border">
+                <form className="flex flex-col items-center justify-center" onSubmit={handleSubmit}>
+                    <div className='loginHead'><h1 className=''>Login Page</h1></div>
+                    <div className='flex flex-col p-2 loginLabels'>
+                        <label className='' htmlFor="email">Email:</label>
+                        <input required className='rounded-2 p-1 mt-1 text-black'
+                            type="email"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div className='flex flex-col p-2 loginLabels'>
+                        <label htmlFor="password">Password:</label>
+                        <input required className='rounded-0 p-1 mt-1 text-black'
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+                    <div className='p-2'>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                            />
+                            Remember Me
+                        </label>
+                    </div>
+                    <div className='pb-4'>
+                        <Link className='forgot' to="/forgot-password">Forgot Password?</Link>
+                    </div>
+                    <button className='p-1 btn btn-success w-100 rounded-0' type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+export default Login;
+
+
+---------------------------------------------------------------------------------
+app.jsx: 
+
+import './App.css';
+import React, { useEffect, useState } from 'react';
+import Login from './components/auth/login';
+import { Admin } from './components/dashboards/Admin';
+import { Employee } from './components/dashboards/Employee';
+import { ToastContainer, toast } from 'react-toastify';
+import { auth, db } from './components/firebase';
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+
+const App = () => {
+    const [user, setUser] = useState(null);
+    const [role, setRole] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            console.log("Auth state changed:", currentUser);
+            if (currentUser) {
+                setUser(currentUser);
+                await fetchUserRole(currentUser.uid);
+            } else {
+                setUser(null);
+                setRole(null);
+                setLoading(false);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    const fetchUserRole = async (uid) => {
+        try {
+            console.log("Fetching role for UID:", uid);
+            const userRef = doc(db, "users", uid);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                const userData = userSnap.data();
+                console.log("User data:", userData); // Log the fetched user data
+
+                if (userData.role) {
+                    setRole(userData.role);
+                } else {
+                    toast.error("Role not found in user data!");
+                    setUser(null);
+                    setRole(null);
+                }
+            } else {
+                toast.error("Role not found!");
+                setUser(null);
+                setRole(null);
+            }
+        } catch (error) {
+            toast.error("Error fetching role");
+            console.error(error.message);
+        } finally {
+            setLoading(false); // Ensure loading is set to false in all cases
+        }
+    };
+
+    const handleLogin = async (email, password) => {
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const loggedInUser = userCredential.user;
+            setUser(loggedInUser);
+            await fetchUserRole(loggedInUser.uid);
+        } catch (error) {
+            toast.error("Invalid credentials");
+            console.error(error.message);
+        }
+    };
+
+    const handleLogout = async () => {
+        await signOut(auth);
+        setUser(null);
+        setRole(null);
+    };
+
+    if (loading) return <h1>Loading...</h1>;
+
+    return (
+        <div>
+            <ToastContainer />
+            {!user ? (
+                <Login handleLogin={handleLogin} />
+            ) : (
+                role === 'admin' ? <Admin /> : <Employee />
+            )}
+        </div>
+    );
+};
+
+export default App;
+
+
+------------------------------------------------------------------------

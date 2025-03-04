@@ -7,7 +7,6 @@ import Tasks from '../../pages/Tasks';
 import { Department } from '../../pages/Department';
 import ManageEmployees from '../../pages/Employees';
 
-
 const AdminDashboard = () => {
     return (
         <div className="admin-dashboard flex">
@@ -16,10 +15,10 @@ const AdminDashboard = () => {
                 <NavBar/>
                 <Routes>
                     <Route index element={<AdminSummary />} />
-                    <Route path="/AdminDashboard" element={<AdminSummary/>}/>
-                    <Route path="/AdminDashboard/Tasks" element={<Tasks/>}/>
-                    <Route path="/AdminDashboard/Employees" element={<ManageEmployees/>}/>
-                    <Route path="/AdminDashboard/Departments" element={<Department/>}/>
+                    <Route path="/" element={<AdminSummary/>}/>
+                    <Route path="/tasks" element={<Tasks/>}/>
+                    <Route path="/employees" element={<ManageEmployees/>}/>
+                    <Route path="/departments" element={<Department/>}/>
                 </Routes>
             </div>
         </div>
@@ -27,4 +26,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-
