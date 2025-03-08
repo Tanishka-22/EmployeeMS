@@ -13,30 +13,34 @@ export const AuthProvider = ({ children }) => {
 
     const fetchUserRole = async (uid) => {
         try {
-            console.log("Fetching role for UID:", uid); // Log the UID
-            const userRef = doc(db, "users", uid);
-            console.log("User reference:", userRef); // Log the document reference
+            const userRef = doc(db, "Users", uid);
             const userSnap = await getDoc(userRef);
+            
             if (userSnap.exists()) {
                 const userData = userSnap.data();
-                console.log("User data:", userData); // Log the fetched user data
-
+                console.log("User data:", userData);
+    
                 if (userData.role) {
                     setRole(userData.role);
                 } else {
-                    setRole('employee'); // Default role
-                    toast.warning("Role not specified, defaulting to employee");
+                    console.error("No role field in user document");
+                    toast.error("Access denied: No role assigned");
+                    setUser(null);
+                    setRole(null);
                 }
             } else {
-                setRole('employee'); // Default role
-                toast.warning("User data not found, defaulting to employee");
+                console.error("User document not found for UID:", uid);
+                toast.error("Access denied: User not found");
+                setUser(null);
+                setRole(null);
             }
         } catch (error) {
             console.error("Error fetching role:", error);
-            setRole('employee'); // Default role
-            toast.error("Error fetching role, defaulting to employee");
+            toast.error("Error accessing user data");
+            setUser(null);
+            setRole(null);
         } finally {
-            setLoading(false); // Ensure loading is set to false in all cases
+            setLoading(false);
         }
     };
 

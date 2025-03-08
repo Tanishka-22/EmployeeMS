@@ -15,8 +15,8 @@ const EmployeeDashboard = () => {
                     <Routes>   
                         <Route index element={<EmpSummary/>}/>
                         <Route index element={<EmpTasks/>}/>
-                        <Route path="/EmployeeDashboard" element={<EmpSummary/>}/>
-                        <Route path="/EmployeeDashboard" element={<EmpTasks/>}/>
+                        <Route path="EmployeeDashboard" element={<EmpSummary/>}/>
+                        <Route path="EmployeeDashboard" element={<EmpTasks/>}/>
                         <Route path="/EmployeeDashboard/Profile" element={<EmpProfile/>}/>
                         
                     </Routes>

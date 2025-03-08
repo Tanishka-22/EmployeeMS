@@ -15,10 +15,10 @@ const AdminDashboard = () => {
                 <NavBar/>
                 <Routes>
                     <Route index element={<AdminSummary />} />
-                    <Route path="/" element={<AdminSummary/>}/>
-                    <Route path="/tasks" element={<Tasks/>}/>
-                    <Route path="/employees" element={<ManageEmployees/>}/>
-                    <Route path="/departments" element={<Department/>}/>
+                    <Route path="AdminDashboard" element={<AdminSummary />} />
+                    <Route path="/AdminDashboard/Tasks" element={<Tasks />} />
+                    <Route path="/AdminDashboard/Employees" element={<ManageEmployees />} />
+                    <Route path="AdminDashboard/Departments" element={<Department />} />
                 </Routes>
             </div>
         </div>
