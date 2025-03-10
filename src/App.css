@@ -56,6 +56,10 @@
   height: 100vh;
 }
 
+#navbar{
+  background-color: rgb(241, 237, 237);
+}
+
 .logoHead{
   font-size: 24px;
   font-weight: bold;

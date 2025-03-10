@@ -31,14 +31,14 @@ export const EmpSidebar = () => {
             </NavLink>
           </li>
           <li className='navList items-center  py-3 rounded'>
-            <NavLink
+            {/* <NavLink
               to="/AdminDashboard"
               className={({ isActive }) =>
                 isActive ? "font-bold" : "font-normal"
               }
             >
               Log Out
-            </NavLink>
+            </NavLink> */}
           </li>
           </ul>
         </div>

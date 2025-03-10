@@ -5,13 +5,14 @@ import { NavBar } from '../dashboards/Admin/NavBar';
 import { AddDepartment } from '../Department/AddDepartment';
 import { DeptList } from '../Department/DeptList';
 
+;
 export const Department = () => {
     const [addDepartment, setAddDepartment] = useState(false);
 
-    const toggleAddDepartment = () => {
+     const toggleAddDepartment = () => {
          setAddDepartment(!addDepartment);
     }
-  return (
+  return ( 
     <div className="flex h-screen">
        
         <div className="main-content flex-1 p-2">

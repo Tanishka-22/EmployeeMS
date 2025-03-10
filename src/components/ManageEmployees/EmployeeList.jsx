@@ -1,28 +1,66 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { db } from '../firebase';
+import { collection, getDocs, deleteDoc } from 'firebase/firestore';
+import EmployeeViewProfile from './EmployeeViewProfile';
+import { EditEmployee } from './EditEmployee';
+import { UpdateEmployeeCount } from "../Department/UpdateEmployeeCount";
+import { FaTrashAlt } from 'react-icons/fa';
 
 const EmployeeList = () => {
-    const employees = [
-        {
-            id: 1,
-            image: ('src/assets/images/user.png.jpg'),
-            name: 'John Doe',
-            dob: '1990-01-01',
-            department: 'Engineering',
-        },
-        {
-            id: 2,
-            image: ('src/assets/images/user.png.jpg'),
-            name: 'Jane Smith',
-            dob: '1985-05-15',
-            department: 'Marketing',
-        },
-    ];
+    const [employees, setEmployees] = useState([]);
+    const [isViewOpen, setIsViewOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
+
+    useEffect(() => {
+        const fetchEmployees = async () => {
+            try {
+                const querySnapshot = await getDocs(collection(db, "Employees"));
+                const employeeData = querySnapshot.docs.map(doc => ({
+                    ...doc.data(),
+                    uid: doc.id 
+                }));
+                setEmployees(employeeData);
+            } catch (error) {
+                console.error("Error fetching employees:", error);
+            }
+        };
+
+        fetchEmployees();
+    }, []);
+
+    const handleViewProfile = (employee) => {
+        setSelectedEmployee(employee);
+        setIsViewOpen(true);
+    };
+
+    const handleEditEmployee = (employee) => {
+        setSelectedEmployee(employee);
+        setIsEditOpen(true);
+    };
+
+    const handleDeleteEmployee = async (employee) => {
+        if (window.confirm('Are you sure you want to delete this employee?')) {
+            try {
+                await deleteDoc(doc(db, "Employees", employee.uid));
+                
+                const updatedEmployees = employees.filter(emp => emp.uid !== employee.uid);
+                setEmployees(updatedEmployees);
+                
+                toast.success("Employee deleted successfully!");
+            } catch (error) {
+                toast.error("Error deleting employee: " + error.message);
+            }
+        }
+    };
+
     return (
-        <table className="w-full m-8">
+        <div className="w-full m-8">
+        <table className='w-full'>
             <thead>
                 <tr className='tableHead py-2'>
                     <th>S.No</th>
-                    <th>Image</th>
+                    <th>Employee ID</th>
                     <th>Name</th>
                     <th>Date of Birth</th>
                     <th>Department</th>
@@ -31,64 +69,38 @@ const EmployeeList = () => {
             </thead>
             <tbody>
                 {employees.map((employee, index) => (
-                <tr className='tableRow' key={employee.id}>
+                <tr className='tableRow' key={employee.uid}>
                     <td>{index + 1}</td>
-                    <td><img src={employee.image} alt={employee.name} width="50" height="50" /></td>
+                    <td>{employee.empID}</td>
                     <td>{employee.name}</td>
-                    <td>{employee.dob}</td>
-                    <td>{employee.department}</td>
+                    <td>{employee.DOB}</td>
+                    <td>{employee.Department}</td>
                     <td>
-                        <button className='bg-blue-500 py-1 px-3.5 mx-2 rounded'>View</button>
-                        <button className='bg-green-500 py-1 px-3.5 mx-2 rounded'>Edit</button>
+                        <button onClick={() => handleViewProfile(employee)} className='bg-blue-500 py-1 px-3.5 mx-2 rounded'>View</button>
+                        <button onClick={() => handleEditEmployee(employee)} className='bg-green-500 py-1 px-3.5 mx-2 rounded'>Edit</button>
                         <button className='bg-yellow-500 py-1 px-3.5 mx-2 rounded'>Salary</button>
                         <button className='bg-red-500 py-1 px-3.5 mx-2 rounded'>Leave</button>
+                        <button onClick={() => handleDeleteEmployee(employee)} className='bg-gray-600 opacity-50 border-solid py-2 px-2 mx-2 rounded text-white hover:bg-black-700 hover:opacity-100'
+                        ><FaTrashAlt/></button>
                     </td>
                 </tr>
-            ))}
+                ))}
             </tbody>
         </table>
+        {isViewOpen && (
+            <EmployeeViewProfile 
+                employee={selectedEmployee} 
+                onClose={() => setIsViewOpen(false)}
+            />
+        )}
+        {isEditOpen && (
+            <EditEmployee 
+                employee={selectedEmployee} 
+                onClose={() => setIsEditOpen(false)}
+            />
+        )}
+        </div> 
     );
 };
 
 export default EmployeeList;
-
-// const employees = [
-//     {
-//         id: 1,
-//         image: 'path/to/image1.jpg',
-//         name: 'John Doe',
-//         dob: '1990-01-01',
-//         department: 'Engineering',
-//     },
-//     {
-//         id: 2,
-//         image: 'path/to/image2.jpg',
-//         name: 'Jane Smith',
-//         dob: '1985-05-15',
-//         department: 'Marketing',
-//     },
-    // Add more employees as needed
-//];
-
-// return (
-//     <table>
-//         
-//         <tbody>
-//             {employees.map((employee, index) => (
-//                 <tr key={employee.id}>
-//                     <td>{index + 1}</td>
-//                     <td><img src={employee.image} alt={employee.name} width="50" height="50" /></td>
-//                     <td>{employee.name}</td>
-//                     <td>{employee.dob}</td>
-//                     <td>{employee.department}</td>
-//                     <td>
-//                         <button>View</button>
-//                         <button>Edit</button>
-//                         <button>Salary</button>
-//                         <button>Leave</button>
-//                     </td>
-//                 </tr>
-//             ))}
-//         </tbody>
-//     </table>
-// );
