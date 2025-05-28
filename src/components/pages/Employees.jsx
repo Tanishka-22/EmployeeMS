@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import SideBar from '../dashboards/Admin/SideBar'
+import SideBar from '../dashboards/Admin/Sidebar.jsx'
 import { NavBar } from '../dashboards/Admin/NavBar';
 import { AddEmployee } from '../ManageEmployees/AddEmployee';
 import EmployeeList from '../ManageEmployees/EmployeeList';

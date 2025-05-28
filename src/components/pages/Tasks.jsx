@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AddTask from '../Tasks/AddTask';
-import SideBar from '../dashboards/Admin/SideBar';
+import SideBar from '../dashboards/Admin/Sidebar.jsx';
 import { NavBar } from '../dashboards/Admin/NavBar';
 import AllTasks from '../Tasks/AllTasks';
 
